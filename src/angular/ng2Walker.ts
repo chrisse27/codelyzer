@@ -174,6 +174,8 @@ export class Ng2Walker extends Lint.RuleWalker {
 
   protected visitNg2TemplateBoundElementPropertyAst(prop: BoundElementPropertyAst,
       context: ts.ClassDeclaration, templateStart: number) {
+    const ast: any = (<e.ASTWithSource>prop.value).ast;
+    ast.expression = (<any>prop.value).source;
     this.visitNg2TemplateAST(prop.value, context, templateStart + getExpressionDisplacement(prop));
   }
 

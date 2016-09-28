@@ -24,6 +24,26 @@ describe('no-access-missing-member', () => {
        });
     });
 
+    it('should work with existing properties and pipes', () => {
+      let source = `
+        @Component({
+          selector: 'foobar',
+          template: \`<div class="1 + {{ showMenu ? '' : 'pure-hidden-sm' }})"></div>\`
+        })
+        class Test {}`;
+        assertFailure('no-access-missing-member', source, {
+          message: 'The property "showMenu" that you\'re trying to access does not exist in the class declaration.',
+          startPosition: {
+            line: 3,
+            character: 40
+          },
+          endPosition: {
+            line: 3,
+            character: 48
+          }
+       });
+    });
+
     it('should fail when using missing method', () => {
       let source = `
         @Component({
@@ -338,6 +358,18 @@ describe('no-access-missing-member', () => {
         })
         class Test {
           foo = {};
+        }`;
+        assertSuccess('no-access-missing-member', source);
+    });
+
+    it('should work with existing properties and pipes', () => {
+      let source = `
+        @Component({
+          selector: 'foobar',
+          template: \`<div class="{{ showMenu ? '' : 'pure-hidden-sm' }}"></div>\`
+        })
+        class Test {
+          showMenu = {};
         }`;
         assertSuccess('no-access-missing-member', source);
     });
